@@ -15,14 +15,16 @@ class Repository {
     });
   }
 
-  Future<void> deleteTask(String docId) async {
-    await _firestore.collection("tasks").doc(docId).delete();
+  Future<void> deleteTask(Task task) async {
+    await _firestore
+        .collection("deleted")
+        .doc(task.id)
+        .set({"task": task.data});
+    await _firestore.collection("tasks").doc(task.id).delete();
   }
 
   Future<void> createTask(Map data) async {
-    Timestamp currentTimeStamp = Timestamp.now();
-
-    Map firestoreData = {"task": data, "data": currentTimeStamp};
+    Map firestoreData = {"task": data};
 
     await _firestore
         .collection("tasks")

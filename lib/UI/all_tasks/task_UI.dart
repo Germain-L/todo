@@ -53,7 +53,7 @@ class _TaskUIState extends State<TaskUI> {
               IconButton(
                 icon: Icon(Icons.delete),
                 onPressed: () => setState(() {
-                  _deleteTask(widget.task.id);
+                  _deleteTask(widget.task);
                 }),
               ),
               IconButton(
