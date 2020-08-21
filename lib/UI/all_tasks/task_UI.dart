@@ -28,7 +28,7 @@ class _TaskUIState extends State<TaskUI> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.8,
+                width: MediaQuery.of(context).size.width * 0.68,
                 child: Text(
                   widget.task.data,
                   style: TextStyle(
@@ -57,7 +57,7 @@ class _TaskUIState extends State<TaskUI> {
                 }),
               ),
               IconButton(
-                icon: Icon(Icons.check),
+                icon: Icon(toDelete ? Icons.undo : Icons.check),
                 onPressed: () => setState(() {
                   toDelete = !toDelete;
                 }),

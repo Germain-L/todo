@@ -12,7 +12,7 @@ class TodoApp extends StatelessWidget {
     return Provider<Repository>(
       create: (_) => Repository(FirebaseFirestore.instance),
       child: MaterialApp(
-        theme: ThemeData.dark(),
+        theme: ThemeData.light(),
         home: SafeArea(
           child: Scaffold(
             // appBar: NewTaskAppBar(),
