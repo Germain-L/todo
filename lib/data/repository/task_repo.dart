@@ -23,8 +23,8 @@ class Repository {
     await _firestore.collection("tasks").doc(task.id).delete();
   }
 
-  Future<void> createTask(Map data) async {
-    Map firestoreData = {"task": data};
+  Future<void> createTask(String taskString) async {
+    Map firestoreData = Map.from({"task": taskString});
 
     await _firestore
         .collection("tasks")
