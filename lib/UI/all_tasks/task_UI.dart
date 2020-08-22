@@ -36,20 +36,6 @@ class _TaskUIState extends State<TaskUI> {
                       decoration: toDelete ? TextDecoration.lineThrough : null),
                 ),
               ),
-              // IconButton(
-              //   icon: Icon(toDelete ? Icons.delete : Icons.check),
-              //   onPressed: () {
-              //     if (toDelete) {
-              //       setState(() {
-              //         _deleteTask(widget.task.id);
-              //       });
-              //     } else {
-              //       setState(() {
-              //         toDelete = !toDelete;
-              //       });
-              //     }
-              //   },
-              // )
               IconButton(
                 icon: Icon(Icons.delete),
                 onPressed: () => setState(() {

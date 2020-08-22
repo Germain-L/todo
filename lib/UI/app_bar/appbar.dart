@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todos/data/repository/task_repo.dart';
 
+import '../../main.dart';
+
 class NewTaskUI extends StatefulWidget with PreferredSizeWidget {
   @override
   _NewTaskUIState createState() => _NewTaskUIState();
@@ -13,11 +15,13 @@ class NewTaskUI extends StatefulWidget with PreferredSizeWidget {
 class _NewTaskUIState extends State<NewTaskUI> {
   Function _addTask;
   String task;
+  TextEditingController newTaskController;
 
   @override
   void initState() {
     super.initState();
     task = "";
+    newTaskController = TextEditingController();
   }
 
   @override
@@ -28,15 +32,22 @@ class _NewTaskUIState extends State<NewTaskUI> {
         onChanged: (String change) => setState(() {
           task = change;
         }),
+        decoration: InputDecoration(
+        ),
+        controller: newTaskController,
       ),
       centerTitle: false,
       elevation: 0,
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Colors.black,
+      // backgroundColor: Theme.of(context).primaryColor,
       actions: [
         IconButton(
           icon: Icon(Icons.add),
           onPressed: () async {
-            await _addTask(task);
+            bool added = await _addTask(task);
+            if (added) {
+              newTaskController.text = "";
+            }
           },
         ),
       ],

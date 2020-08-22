@@ -9,26 +9,16 @@ import 'UI/main_screen.dart';
 class TodoApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    FocusScope.of(context).addListener(() {});
     return Provider<Repository>(
       create: (_) => Repository(FirebaseFirestore.instance),
       child: MaterialApp(
         theme: ThemeData.dark(),
         home: SafeArea(
           child: Scaffold(
-              // appBar: AppBar(
-              //   title: TextField(),
-              //   centerTitle: false,
-              //   elevation: 0,
-              //   backgroundColor: Theme.of(context).primaryColor,
-              //   actions: [
-              //     IconButton(
-              //       icon: Icon(Icons.add),
-              //       onPressed: () {},
-              //     ),
-              //   ],
-              // ),
-              appBar: NewTaskUI(),
-              body: MainScreen()),
+            appBar: NewTaskUI(),
+            body: MainScreen(),
+          ),
         ),
       ),
     );

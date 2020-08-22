@@ -23,12 +23,14 @@ class Repository {
     await _firestore.collection("tasks").doc(task.id).delete();
   }
 
-  Future<void> createTask(String taskString) async {
-    Map firestoreData = Map.from({"task": taskString});
-
+  Future<bool> createTask(String taskString) async {
     await _firestore
         .collection("tasks")
-        .add(firestoreData)
-        .catchError((e) => throw (e));
+        .add({"task": taskString})
+        .catchError((e) => throw (e))
+        .then((value) {
+          return true;
+        });
+    return false;
   }
 }

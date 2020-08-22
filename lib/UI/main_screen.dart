@@ -18,6 +18,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     _tasksList = Provider.of<Repository>(context).getTasks();
     return Container(
+      color: Colors.black,
       child: StreamBuilder<List<Task>>(
         stream: _tasksList,
         builder: (BuildContext context, AsyncSnapshot<List<Task>> snapshot) {
