@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todos/data/repository/task_repo.dart';
 
-import '../../main.dart';
+import '../../data/repository/task_repo.dart';
 
 class NewTaskUI extends StatefulWidget with PreferredSizeWidget {
   @override
@@ -38,11 +37,10 @@ class _NewTaskUIState extends State<NewTaskUI> {
       ),
       centerTitle: false,
       elevation: 0,
-      backgroundColor: Colors.black,
-      // backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Colors.white12,
       actions: [
         IconButton(
-          icon: Icon(Icons.add),
+          icon: Icon(Icons.add, color: Colors.black,),
           onPressed: () async {
             bool added = await _addTask(task);
             if (added) {

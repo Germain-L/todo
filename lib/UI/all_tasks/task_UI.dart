@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todos/data/repository/task_repo.dart';
-import 'package:todos/data/task.dart';
+
+import '../../data/repository/task_repo.dart';
+import '../../data/task.dart';
 
 class TaskUI extends StatefulWidget {
   final Task task;
@@ -34,13 +35,13 @@ class _TaskUIState extends State<TaskUI> {
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
-            icon: Icon(Icons.delete),
+            icon: Icon(Icons.delete, color: Colors.red,),
             onPressed: () => setState(() {
               _deleteTask(widget.task);
             }),
           ),
           IconButton(
-            icon: Icon(widget.task.done ? Icons.undo : Icons.check),
+            icon: Icon(widget.task.done ? Icons.undo : Icons.check, color: Colors.green,),
             onPressed: () {
               if(widget.task.done) {
                 _unmarkTaskDone(widget.task);

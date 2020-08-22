@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../data/repository/task_repo.dart';
 import '../data/task.dart';
 import 'main_screen/all_task_screen.dart';
@@ -18,7 +19,6 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     _tasksList = Provider.of<Repository>(context).getTasks();
     return Container(
-      color: Colors.black,
       child: StreamBuilder<List<Task>>(
         stream: _tasksList,
         builder: (BuildContext context, AsyncSnapshot<List<Task>> snapshot) {

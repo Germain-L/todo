@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:todos/UI/all_tasks/task_UI.dart';
-import 'package:todos/data/repository/task_repo.dart';
-import 'package:todos/data/task.dart';
+
+import '../../data/task.dart';
+import '../all_tasks/task_UI.dart';
 
 class AllTasks extends StatelessWidget {
   final List<Task> tasks;
@@ -12,7 +11,10 @@ class AllTasks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: ListView.builder(
+      child: ListView.separated(
+        separatorBuilder: (context, index) {
+          return Divider();
+        },
         itemCount: tasks.length,
         itemBuilder: (context, index) {
           return TaskUI(
