@@ -13,45 +13,44 @@ class TaskUI extends StatefulWidget {
 }
 
 class _TaskUIState extends State<TaskUI> {
-  bool toDelete = false;
-
   Function _deleteTask;
+  Function _markTaskDone;
+  Function _unmarkTaskDone;
   @override
   Widget build(BuildContext context) {
     _deleteTask = Provider.of<Repository>(context).deleteTask;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.68,
-                child: Text(
-                  widget.task.data,
-                  style: TextStyle(
-                      fontSize: 30,
-                      decoration: toDelete ? TextDecoration.lineThrough : null),
-                ),
-              ),
-              IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () => setState(() {
-                  _deleteTask(widget.task);
-                }),
-              ),
-              IconButton(
-                icon: Icon(toDelete ? Icons.undo : Icons.check),
-                onPressed: () => setState(() {
-                  toDelete = !toDelete;
-                }),
-              ),
-            ],
+    _markTaskDone = Provider.of<Repository>(context).markTaskDone;
+    _unmarkTaskDone = Provider.of<Repository>(context).unmarkTaskDone;
+    return ListTile(
+      title: Text(
+        widget.task.data,
+        style: TextStyle(
+          fontSize: 30,
+          decoration: widget.task.done ? TextDecoration.lineThrough : TextDecoration.none,
+        ),
+      ),
+      subtitle: Text(widget.task.time()),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () => setState(() {
+              _deleteTask(widget.task);
+            }),
           ),
-        )
-      ],
+          IconButton(
+            icon: Icon(widget.task.done ? Icons.undo : Icons.check),
+            onPressed: () {
+              if(widget.task.done) {
+                _unmarkTaskDone(widget.task);
+              } else {
+                _markTaskDone(widget.task);
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }
