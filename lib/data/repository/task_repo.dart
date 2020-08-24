@@ -34,11 +34,8 @@ class Repository {
     await _firestore
         .collection("tasks")
         .add({"task": taskString, "done": false, "time": timeCreated})
-        .catchError((e) => throw (e))
-        .then((value) {
-          return true;
-        });
-    return false;
+        .catchError((e) => throw (e));
+    return true;
   }
 
   Future<void> markTaskDone(Task task) async {

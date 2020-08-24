@@ -45,6 +45,7 @@ class _NewTaskUIState extends State<NewTaskUI> {
             bool added = await _addTask(task);
             if (added) {
               newTaskController.text = "";
+              FocusScope.of(context).unfocus();
             }
           },
         ),
