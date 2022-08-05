@@ -35,6 +35,7 @@ func setupServer(db *sql.DB) *mux.Router {
 	// r.HandleFunc("/user/id", h.GetUserId).Methods(http.MethodGet)
 	r.Handle("/todo", handlers.Authenticate(http.HandlerFunc(h.PostTodo))).Methods(http.MethodPost)
 	r.Handle("/todo", handlers.Authenticate(http.HandlerFunc(h.GetTodo))).Methods(http.MethodGet)
+	r.Handle("/todo/{id}", handlers.Authenticate(http.HandlerFunc(h.PatchTodo))).Methods(http.MethodPatch)
 
 	return r
 }

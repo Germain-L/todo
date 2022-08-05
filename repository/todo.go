@@ -19,7 +19,14 @@ func (repo TodoRepo) GetTodosUser(user_id string) ([]models.Todo, error) {
 
 	for rows.Next() {
 		var todo models.Todo
-		err := rows.Scan(&todo.Id, &todo.Title, &todo.Completed, &todo.Created_at, &todo.User_id)
+		err := rows.Scan(
+			&todo.Id,
+			&todo.Title,
+			&todo.Completed,
+			&todo.Created_at,
+			&todo.User_id,
+		)
+
 		if err != nil {
 			return todos, err
 		}
@@ -32,13 +39,17 @@ func (repo TodoRepo) GetTodosUser(user_id string) ([]models.Todo, error) {
 func (repo TodoRepo) GetTodoId(id string) (models.Todo, error) {
 	var todo models.Todo
 
-	q, err := repo.Db.Query("SELECT * FROM todo WHERE id = $1", id)
+	err := repo.Db.QueryRow("SELECT * FROM todo WHERE id = $1", id).Scan(
+		&todo.Id,
+		&todo.Title,
+		&todo.Completed,
+		&todo.Created_at,
+		&todo.User_id,
+	)
 
 	if err != nil {
 		return todo, err
 	}
-
-	q.Scan(todo)
 
 	return todo, nil
 }
@@ -48,7 +59,14 @@ func (repo TodoRepo) GetTodoTitle(email string) (models.Todo, error) {
 
 	// query the database for the user with the given email
 	// put it in user
-	err := repo.Db.QueryRow("SELECT * FROM todo WHERE title = $1", email).Scan(&todo.Id, &todo.Title, &todo.Completed, &todo.User_id)
+	err := repo.Db.QueryRow("SELECT * FROM todo WHERE title = $1", email).Scan(
+		&todo.Id,
+		&todo.Title,
+		&todo.Completed,
+		&todo.Created_at,
+		&todo.User_id,
+	)
+
 	if err != nil {
 		return todo, err
 	}
@@ -57,18 +75,24 @@ func (repo TodoRepo) GetTodoTitle(email string) (models.Todo, error) {
 }
 
 func (repo TodoRepo) CreateTodo(todo models.Todo) error {
-	_, err := repo.Db.Exec("INSERT INTO todo (id, title, completed, user_id) VALUES ($1, $2, $3, $4)", todo.Id, todo.Title, todo.Completed, todo.User_id)
+	_, err := repo.Db.Exec("INSERT INTO todo (id, title, completed, user_id) VALUES ($1, $2, $3, $4)",
+		todo.Id,
+		todo.Title,
+		todo.Completed,
+		todo.Created_at,
+		todo.User_id,
+	)
 
 	return err
 }
 
-func (repo TodoRepo) SetCompleted(id string) error {
+func (repo TodoRepo) Complete(id string) error {
 	_, err := repo.Db.Exec("UPDATE todo SET completed = true WHERE id = $1", id)
 
 	return err
 }
 
-func (repo TodoRepo) SetUncompleted(id string) error {
+func (repo TodoRepo) Incomplete(id string) error {
 	_, err := repo.Db.Exec("UPDATE todo SET completed = false WHERE id = $1", id)
 
 	return err

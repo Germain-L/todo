@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/gorilla/mux"
 )
 
 func (h Handler) PostTodo(w http.ResponseWriter, r *http.Request) {
@@ -75,4 +76,77 @@ func (h Handler) GetTodo(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(todos)
+}
+
+func (h Handler) PatchTodo(w http.ResponseWriter, r *http.Request) {
+	// get email from context
+	var email = r.Context().Value("email").(string)
+
+	var user models.User
+
+	// get userid from email
+	user, err := h.UserRepo.GetUserEmail(email)
+	if err != nil {
+		log.Println("error getting user")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(err)
+		return
+	}
+
+	// get todo id from mux vars
+	vars := mux.Vars(r)
+	var todoId = vars["id"]
+
+	// get todo from id
+	todo, err := h.TodoRepo.GetTodoId(todoId)
+	if err != nil {
+		log.Println("error getting todo")
+		log.Println(err.Error())
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(err)
+		return
+	}
+
+	// check if todo belongs to user
+	if todo.User_id != user.Id {
+		log.Println("todo does not belong to user")
+		log.Println(todo.User_id)
+		log.Println(user.Id)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(err)
+		return
+	}
+
+	type Completed struct {
+		Completed bool `json:"completed"`
+	}
+
+	var completed Completed
+	err = json.NewDecoder(r.Body).Decode(&completed)
+	if err != nil {
+		log.Println("error decoding completed")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(err)
+		return
+	}
+
+	if completed.Completed {
+		err = h.TodoRepo.Complete(todoId)
+		if err != nil {
+			log.Println("error completing todo")
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(err)
+			return
+		}
+	} else {
+		err = h.TodoRepo.Incomplete(todoId)
+		if err != nil {
+			log.Println("error completing todo")
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(err)
+			return
+		}
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
