@@ -6,10 +6,10 @@ import (
 
 type Handler struct {
 	UserRepo repository.UserRepo
-	TodoRepo repository.TodoRepository
+	TodoRepo repository.TodoRepo
 }
 
-func New(userRepo repository.UserRepo, todoRepository repository.TodoRepository) Handler {
+func New(userRepo repository.UserRepo, todoRepository repository.TodoRepo) Handler {
 	return Handler{
 		UserRepo: userRepo,
 		TodoRepo: todoRepository,
