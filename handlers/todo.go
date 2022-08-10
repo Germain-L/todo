@@ -150,3 +150,52 @@ func (h Handler) PatchTodo(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 }
+
+func (h Handler) DeleteTodo(w http.ResponseWriter, r *http.Request) {
+	// get email from context
+	var email = r.Context().Value("email").(string)
+
+	var user models.User
+
+	// get userid from email
+	user, err := h.UserRepo.GetUserEmail(email)
+	if err != nil {
+		log.Println("error getting user")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(err)
+		return
+	}
+
+	// get todo id from mux vars
+	vars := mux.Vars(r)
+	var todoId = vars["id"]
+
+	// get todo from id
+	todo, err := h.TodoRepo.GetTodoId(todoId)
+	if err != nil {
+		log.Println("error getting todo")
+		log.Println(err.Error())
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(err)
+		return
+	}
+
+	// check if todo belongs to user
+	if todo.User_id != user.Id {
+		log.Println("todo does not belong to user")
+		log.Println(todo.User_id)
+		log.Println(user.Id)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(err)
+		return
+	}
+
+	err = h.TodoRepo.DeleteTodo(todo.Id)
+	if err != nil {
+		log.Println("error deleting todo")
+		log.Println(err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(err)
+		return
+	}
+}
