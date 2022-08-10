@@ -93,5 +93,45 @@ func (h Handler) Signin(w http.ResponseWriter, r *http.Request) {
 	})
 
 	log.Printf("Success, %s issued", tokenString)
-	json.NewEncoder(w).Encode("Success")
+	json.NewEncoder(w).Encode(map[string]string{"id": user.Id})
+}
+
+func (h Handler) DeleteUser(w http.ResponseWriter, r *http.Request) {
+	var email = r.Context().Value("email").(string)
+
+	// get userid from email
+	user, err := h.UserRepo.GetUserEmail(email)
+	if err != nil {
+		log.Println("error getting user")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(err)
+		return
+	}
+
+	var todos []models.Todo
+	todos, err = h.TodoRepo.GetTodosUser(user.Id)
+	if err != nil {
+		log.Println("error deleting user's todos")
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(err)
+		return
+	}
+
+	for _, v := range todos {
+		err = h.TodoRepo.DeleteTodo(v.Id)
+		if err != nil {
+			log.Println("error deleting user's todos")
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(err)
+			return
+		}
+	}
+
+	err = h.UserRepo.Deleteuser(user.Id)
+	if err != nil {
+		log.Println("error deleting user")
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(err)
+		return
+	}
 }

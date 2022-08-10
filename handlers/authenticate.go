@@ -14,7 +14,7 @@ import (
 
 type Key string
 
-const UserKey Key = "email"
+const emailKey Key = Key("email")
 
 // middleware validating bearer JWT token
 func Authenticate(next http.Handler) http.Handler {

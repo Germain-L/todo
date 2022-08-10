@@ -38,6 +38,8 @@ func setupServer(db *sql.DB) *mux.Router {
 	r.Handle("/todo/{id}", handlers.Authenticate(http.HandlerFunc(h.PatchTodo))).Methods(http.MethodPatch)
 	r.Handle("/todo/{id}", handlers.Authenticate(http.HandlerFunc(h.DeleteTodo))).Methods(http.MethodDelete)
 
+	r.Handle("/user/{id}", handlers.Authenticate(http.HandlerFunc(h.DeleteUser))).Methods(http.MethodDelete)
+
 	return r
 }
 
